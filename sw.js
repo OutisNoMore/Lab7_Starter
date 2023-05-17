@@ -1,6 +1,5 @@
 // sw.js - This file needs to be in the root of the directory to work,
 //         so do not move it next to the other scripts
-console.log("test!!");
 
 const CACHE_NAME = 'lab-7-starter';
 
@@ -15,7 +14,6 @@ const PRECACHED_URLS = [
 
 // Installs the service worker. Feed it some initial URLs to cache
 self.addEventListener('install', function (event) {
-  console.log("install!");
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       // B6. Add all of the URLs from RECIPE_URLs here so that they are
@@ -27,7 +25,6 @@ self.addEventListener('install', function (event) {
 
 // Activates the service worker
 self.addEventListener('activate', function (event) {
-  console.log("Activate!!");
   event.waitUntil(self.clients.claim());
 });
 
@@ -55,7 +52,7 @@ self.addEventListener('fetch', function (event) {
     if (isPrecachedRequest) {
       return cache.match(event.request.url);
     }
-    return fetch(event.request).then((response) => {
+    return fetch(event.request.url).then((response) => {
       cache.put(event.request, response.clone());
       return response;
     });
