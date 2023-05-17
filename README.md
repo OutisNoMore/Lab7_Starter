@@ -1,4 +1,4 @@
 # Lab 7 - Starter
 
 Author: Jaemok "Christian" Lee
-url: https://outisnomore.github.io/Lab7_Starter
+url: [website](https://outisnomore.github.io/Lab7_Starter)
