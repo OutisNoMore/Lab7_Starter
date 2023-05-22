@@ -47,14 +47,22 @@ self.addEventListener('fetch', function (event) {
   //     Otherwise fetch the resource, add it to the cache, and return
   //     network response.
   event.respondWith(caches.open(CACHE_NAME).then((cache) => {
+    return cache.match(event.request).then((cachedResponse) => {
+      return cachedResponse || fetch(event.request.url).then((response) => {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    });
+    /*
     const url = new URL(event.request.url);
     const isPrecachedRequest = PRECACHED_URLS.includes(url.pathname);
-    if (isPrecachedRequest) {
+    if (isPrecachedRequest !== null) {
       return cache.match(event.request.url);
     }
     return fetch(event.request.url).then((response) => {
       cache.put(event.request, response.clone());
       return response;
     });
+    */
   }));
 });

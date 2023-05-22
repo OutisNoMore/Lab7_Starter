@@ -126,11 +126,29 @@ async function getRecipes() {
   // A10. Log any errors from catch using console.error
   // A11. Pass any errors to the Promise's reject() function
   let networkRecipes = [];
+  return new Promise(async (resolve, reject) => {
+    for (let i = 0; i < RECIPE_URLS.length; i++) {
+      try {
+        const request = await new Request(RECIPE_URLS[i]);
+        let response = await fetch(request);
+        let data = await response.json();
+        networkRecipes.push(data);
+      } catch (err) {
+        console.error(err)
+        reject(err);
+      }
+    }
+    if (networkRecipes.length == RECIPE_URLS.length) {
+      localStorage.setItem("recipes", JSON.stringify(networkRecipes));
+      resolve(networkRecipes);
+    }
+  });
+    /*
   return new Promise((resolve, reject) => {
     const fetchRecipe = async (url) => { 
       await fetch(url)
         .then( response => response.json() )
-        .then ( data => networkRecipes.push(data) )
+        .then( data => networkRecipes.push(data) )
     }
 
     Promise
@@ -142,28 +160,9 @@ async function getRecipes() {
       .catch((err) => {
         console.error(err);
         reject(err);
-      })
-    /*
-    for (let i = 0; i < RECIPE_URLS.length; i++) {
-      const request = new Request(RECIPE_URLS[i]);
-      fetch (request)
-        .then ((response) => response.json())
-        .then ((data) => networkRecipes.push(data))
-        .catch((error) => {
-          console.error(error);
-          reject(error);
-        });
-      try {
-        const request = new Request(url);
-        let response = await fetch(request);
-        let data = await response.json();
-        networkRecipes.push(data);
-      } catch (err) {
-        console.error(err)
-        reject(err);
-      }
-    }*/
-  });
+      });
+    });
+    */
 }
 
 /**
